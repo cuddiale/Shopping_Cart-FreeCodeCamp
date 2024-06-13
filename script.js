@@ -85,8 +85,9 @@ const products = [
   },
 ];
 
-products.forEach(({ name, id, price, category }) => {
-  dessertCards.innerHTML += `
+products.forEach(
+  ({ name, id, price, category }) => {
+    dessertCards.innerHTML += `
       <div class="dessert-card">
         <h2>${name}</h2>
         <p class="dessert-price">$${price}</p>
@@ -97,7 +98,8 @@ products.forEach(({ name, id, price, category }) => {
         </button>
       </div>
     `;
-});
+  }
+);
 
 class ShoppingCart {
   constructor() {
@@ -109,5 +111,22 @@ class ShoppingCart {
   addItem(id, products) {
     const product = products.find((item) => item.id === id);
     const { name, price } = product;
+    this.items.push(product);
+
+    const totalCountPerProduct = {};
+    this.items.forEach((dessert) => {
+      totalCountPerProduct[dessert.id] = (totalCountPerProduct[dessert.id] || 0) + 1;
+    })
+
+    const currentProductCount = totalCountPerProduct[product.id];
+    const currentProductCountSpan = document.getElementById(`product-count-for-id${id}`);
+
+    currentProductCount > 1 
+      ? currentProductCountSpan.textContent = `${currentProductCount}x`
+      : productsContainer.innerHTML += `
+      <div id="dessert${id}" class="product">
+
+      </div>
+      `;
   }
-}
+};
